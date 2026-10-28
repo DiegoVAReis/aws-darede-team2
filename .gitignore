@@ -1,0 +1,25 @@
+# Secrets - NUNCA commitar
+.env
+.env.*
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.uv/
+uv.lock
+
+# Vector store local (gerado pela ingestao)
+backend/chroma_store/
+
+# Node / React
+node_modules/
+dist/
+frontend/dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage/
