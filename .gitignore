@@ -20,6 +20,8 @@ node_modules/
 dist/
 frontend/dist/
 .pytest_cache/
+.hypothesis/
+*.egg-info/
 .ruff_cache/
 .coverage
 coverage/
