@@ -17,7 +17,7 @@ C) Ambos: o agente por padrao, e um modo de depuracao que retorna os trechos bru
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Question 2
 Como o agente deve se comportar quando a pergunta nao tem resposta na base de conhecimento (fora de escopo ou sem trechos relevantes)?
@@ -30,7 +30,7 @@ C) Pedir ao usuario para reformular a pergunta
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 3
 Qual o idioma das respostas do assistente?
@@ -41,7 +41,7 @@ B) Mesmo idioma da pergunta do usuario
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 4
 Conversa multi-turno: o chat deve manter contexto entre perguntas (ex.: "e a garantia?" referindo-se a pergunta anterior)?
@@ -54,7 +54,7 @@ C) Sim, manter a memoria de conversa dentro do agente Strands (sessao em memoria
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C, porém avalie os impactos dessa escolha
 
 ## Question 5
 Qual o escopo da interface React (Vite + TypeScript) no MVP?
@@ -67,7 +67,7 @@ C) Minimo + exemplos de perguntas sugeridas na tela inicial
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: Interface estilo chat GPT, com os requisitos a A, B e C
 
 ## Question 6
 Como o front-end deve exibir as fontes citadas?
@@ -78,7 +78,7 @@ B) Lista de arquivos com trecho (passagem) usado, expansivel
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: Mostrar o cabeçalho do arquivo.
 
 ## Question 7
 Streaming de resposta (token a token) e desejado?
@@ -89,7 +89,7 @@ B) Sim, streaming via SSE ate o front
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Question 8
 O `tech-env.md` descreve o chunking como "~500 tokens", mas o exemplo de codigo faz janelas de 500 palavras. Como tratar?
@@ -102,7 +102,7 @@ C) Chunking por secao Markdown (cabecalhos), respeitando limite maximo, com over
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 9
 Os documentos em `anyone_kb/` tem cerca de 100 linhas cada. Com chunk de ~500, muitos documentos terao poucos chunks. A ingestao deve ser idempotente (rodar mais de uma vez sem duplicar)?
@@ -115,7 +115,7 @@ C) Nao e necessario, a ingestao roda uma unica vez
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 10
 Qual o gerenciador de pacotes/ambiente Python? O `.gitignore` menciona `uv`/`uv.lock`, e o `tech-env.md` cita `uv` fixando versoes.
@@ -126,7 +126,7 @@ B) `pip` + `venv` + `requirements.txt`
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Question 11
 Qual o gerenciador de pacotes do front-end?
@@ -139,7 +139,7 @@ C) yarn
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Question 12
 CORS e portas locais: como o front React (Vite, porta 5173) deve falar com a API FastAPI?
@@ -150,7 +150,7 @@ B) Proxy do Vite para `/v1` e `/health` (sem CORS)
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## Question 13
 Escopo de testes automatizados (o `tech-env.md` exige unitarios com 80% de cobertura no backend; integracao condicional; E2E opcional). O que gerar?
@@ -163,7 +163,7 @@ C) Opcao A + teste de integracao real contra o Bedrock (requer `.env` valido, ma
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 14
 Lint/format e hooks de qualidade: o `tech-env.md` exige `ruff` no pre-commit. Deve ser configurado?
@@ -176,7 +176,7 @@ C) Nao configurar neste momento
 
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question 15
 Documentacao de entrega: o que deve acompanhar o codigo?
@@ -187,7 +187,7 @@ B) README + exemplo `.env.example` (sem segredos) + script(s) de atalho para rod
 
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A , porem a documentação sobre o env não pode export secrets.
 
 ---
 
@@ -202,7 +202,7 @@ B) Nao: ignorar todas as regras SECURITY (adequado para PoCs, prototipos e proje
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question: Resiliency Extensions
 Deve o baseline de resiliencia ser aplicado a este projeto?
@@ -215,7 +215,7 @@ B) Nao: ignorar o baseline de resiliencia (adequado para PoCs, prototipos e proj
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ## Question: Property-Based Testing Extension
 Devem as regras de testes baseados em propriedades (PBT) ser aplicadas neste projeto?
@@ -228,4 +228,4 @@ C) Nao: ignorar todas as regras PBT (adequado para CRUDs simples, projetos so de
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
