@@ -1,0 +1,78 @@
+:root {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* Contraste conferido: texto normal >= 4,5:1; bordas de controles >= 3:1 (NFR-F-23). */
+  --color-bg: #f7f8f7;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef1ee;
+  --color-text: #1b2420;
+  --color-text-muted: #55605a;
+  --color-border: #d9dfda;
+  --color-border-strong: #7b867f;
+  --color-link: #1a5fb4;
+  --color-code-bg: #eef1ee;
+
+  --color-accent: #2f6f4f;
+  --color-accent-hover: #255a40;
+  --color-accent-text: #ffffff;
+  --color-disabled-bg: #dfe4e0;
+  --color-disabled-text: #55605a;
+
+  --color-user-bubble: #2f6f4f;
+  --color-user-bubble-text: #ffffff;
+
+  --color-error-bg: #fdecec;
+  --color-error-border: #e6b3b3;
+  --color-error-text: #7a1f1f;
+  --color-danger: #b42318;
+
+  --color-notice-bg: #fff7e0;
+  --color-notice-border: #e8d28a;
+  --color-notice-text: #5c4400;
+
+  --color-sidebar-bg: #14231b;
+  --color-sidebar-text: #e8f0eb;
+  --color-sidebar-muted: #a9b9af;
+  --color-sidebar-hover: #213a2d;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* BR-A11Y-03: foco sempre visível. */
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,6 @@
+.layout {
+  display: grid;
+  grid-template-columns: 17.5rem minmax(0, 1fr);
+  height: 100vh;
+  min-width: 64rem; /* NFR-F-26: notebook de 1024 px */
+}

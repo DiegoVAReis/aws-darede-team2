@@ -1,0 +1,8 @@
+.list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.5rem clamp(1rem, 6vw, 4rem);
+}

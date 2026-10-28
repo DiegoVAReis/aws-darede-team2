@@ -1,0 +1,46 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 1rem 0.75rem;
+  background: var(--color-sidebar-bg);
+  color: var(--color-sidebar-text);
+  overflow-y: auto;
+}
+
+/* O azul do foco padrão não contrasta com o fundo escuro da barra lateral. */
+.sidebar :focus-visible {
+  outline-color: #ffd54a;
+}
+
+.brand {
+  margin: 0.25rem 0.5rem 0.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.newButton {
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--color-sidebar-muted);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-sidebar-text);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.newButton:hover {
+  background: var(--color-sidebar-hover);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}

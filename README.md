@@ -3,7 +3,7 @@
 Chatbot RAG local que responde perguntas sobre procedimentos, normas, catálogos e políticas internas da Anyone Agro Business (empresa fictícia, projeto didático) e **cita o documento de origem** de cada resposta.
 
 - **Backend (pronto):** Python 3.11+, FastAPI, Strands Agents, ChromaDB, Amazon Nova Pro e Titan Embeddings v2 via Amazon Bedrock.
-- **Frontend (pendente):** React 18 + Vite + TypeScript, estilo ChatGPT. Ainda não foi gerado (Unidade 2).
+- **Frontend (pronto):** React 18 + Vite + TypeScript, estilo ChatGPT, com barra lateral de conversas guardadas no navegador.
 - **Base de conhecimento:** 15 documentos Markdown em `anyone_kb/`.
 - **Execução:** totalmente local. Nenhum serviço de hospedagem na AWS; só o Bedrock é chamado.
 
@@ -14,7 +14,8 @@ Chatbot RAG local que responde perguntas sobre procedimentos, normas, catálogos
 | Inception (requisitos, histórias, design, unidades) | Concluída |
 | Backend: código e testes | Gerado. 144 testes passaram, cobertura de 98% (Bedrock simulado) |
 | Backend: execução com o Bedrock real, calibração do limite de distância | **Pendente** (ver "Verificação com o Bedrock real") |
-| Frontend | **Pendente** (Functional Design, NFR, código) |
+| Frontend: código e testes | Gerado. 187 testes passaram (exemplos, propriedades e telas), `tsc` e `vite build` sem erros |
+| Frontend: uso com o Backend real | **Pendente** (ver "Verificação integrada") |
 | Build and Test integrado, README final | Pendente |
 
 O estado detalhado e o histórico de decisões estão em `aidlc-docs/` (ver "Como retomar o trabalho").
@@ -26,7 +27,7 @@ O estado detalhado e o histórico de decisões estão em `aidlc-docs/` (ver "Com
 | Python | 3.11 ou superior (testado com 3.13.5) | `python --version` |
 | pip | qualquer recente | `python -m pip --version` |
 | Git | qualquer recente | `git --version` |
-| Node.js e npm | 18 ou superior (só para o Frontend) | `node --version; npm --version` |
+| Node.js e npm | Node `22.22.2` ou superior na linha 22, `24.15.0` ou superior na linha 24, ou `26+` (só para o Frontend; limite do Vitest 5 e do jsdom 30). Node 20 e 22 mais antigos não rodam os testes | `node --version; npm --version` |
 | `uv` | **opcional** | `uv --version` |
 
 Também é preciso de **internet** na primeira execução: o `tiktoken` baixa o vocabulário `cl100k_base` na primeira vez que conta tokens (ingestão e testes de chunking).
@@ -100,6 +101,22 @@ Os testes não chamam a AWS (Bedrock sempre simulado). Os testes de propriedades
 
 ## Execução
 
+### Atalho: subir Backend e Frontend juntos
+
+Depois de instalar o Backend e o Frontend (seções "Instalação"), o `start.ps1` da raiz abre uma janela para cada serviço, espera os dois responderem e abre o navegador em `http://localhost:5173`:
+
+```powershell
+.\start.ps1               # sobe os dois
+.\start.ps1 -Ingest       # indexa a base antes de subir (use na primeira vez)
+.\start.ps1 -NoBrowser    # não abre o navegador
+.\start.ps1 -BackendPort 9000   # Backend em outra porta (o Frontend recebe VITE_API_BASE_URL)
+.\start.ps1 -DryRun       # só mostra o que faria
+```
+
+Se o PowerShell bloquear o script, rode `powershell -ExecutionPolicy Bypass -File .\start.ps1`. Para parar, feche as duas janelas ou use Ctrl+C em cada uma. O script confere o ambiente virtual, o `.env`, o Node, as portas 8000 e 5173 livres e instala as dependências do Frontend se faltarem.
+
+Os passos manuais abaixo continuam valendo.
+
 ### 1. Indexar a base de conhecimento (uma vez, e de novo quando `anyone_kb/` mudar)
 
 ```powershell
@@ -137,6 +154,65 @@ Contrato resumido de `POST /v1/ask`:
 - Resposta: `{ "answer": "...", "sources": [{ "file": "...", "title": "..." }], "session_id": "...", "session_reset": false }`
 - Erros: `{ "error": { "code": "...", "message": "..." } }` com `VALIDATION_ERROR` (422), `KB_NOT_INDEXED` (503), `UPSTREAM_ERROR` (502) e `INTERNAL_ERROR` (500).
 
+## Frontend
+
+**Todos os comandos do Frontend rodam dentro de `frontend/`**, a partir da raiz do projeto: `cd frontend`.
+
+### Instalação
+
+```powershell
+cd frontend
+npm install
+```
+
+O `package.json` fixa versões exatas e o `package-lock.json` é versionado. Se aparecer o aviso `EBADENGINE`, a sua versão do Node é menor que a exigida (ver "Pré-requisitos").
+
+### Execução
+
+Com o Backend no ar (passos "Indexar a base" e "Subir a API"), em outro terminal:
+
+```powershell
+cd frontend
+npm run dev
+```
+
+Abra `http://localhost:5173`. A porta **5173 é fixa**: o Backend só libera essa origem no CORS, então se ela estiver ocupada o Vite avisa e não sobe (libere a porta em vez de trocá-la).
+
+Não é preciso login nem chave: o Frontend só conversa com a API local. Se o Backend usar outra porta, defina `VITE_API_BASE_URL` (por exemplo `http://localhost:8001`) em `frontend/.env.local`, que o Git ignora. Essa variável é pública no navegador, portanto nunca coloque credenciais nela.
+
+### Como usar
+
+- Digite a pergunta e pressione **Enter** (Shift+Enter quebra a linha). O limite é de 2000 caracteres.
+- A resposta mostra, abaixo do texto, o **título do documento e o nome do arquivo** de onde veio. Sem fontes, a resposta vem de conhecimento geral e avisa isso no texto.
+- A barra lateral guarda várias conversas no navegador: criar, alternar, renomear e excluir (com confirmação). Elas continuam ao recarregar a página.
+- Se o Backend for reiniciado, a próxima pergunta mostra o aviso de que o contexto foi reiniciado; as mensagens antigas continuam na tela.
+- Use **uma aba por vez**: as conversas ficam no `localStorage` e as abas não se sincronizam.
+
+### Testes e verificação
+
+```powershell
+cd frontend
+npm test                # testes de exemplo, de propriedades (fast-check) e de telas (Vitest + Testing Library)
+npm run typecheck       # verificação de tipos (tsc --noEmit)
+npm run build           # tipos + build de produção em frontend/dist/
+```
+
+Os testes não chamam o Backend nem a AWS (`fetch` sempre simulado). Para repetir uma falha de propriedade, use a seed e o caminho que o `fast-check` imprime: `fc.assert(propriedade, { seed, path })`.
+
+## Verificação integrada (pendente)
+
+Com Backend e Frontend no ar e a base indexada, confirmar no navegador:
+
+| Teste | Esperado |
+|---|---|
+| Clicar na sugestão "Qual a garantia padrão dos tratores?" | Resposta com fonte `maquinas_agricolas_catalogo.md` e o título H1 do documento |
+| Pergunta de acompanhamento na mesma conversa | Resposta pelo contexto, sem aviso de reinício |
+| Pergunta fora da base | Texto avisa que não veio da base interna e nenhuma lista de fontes aparece |
+| Reiniciar o Backend e perguntar na mesma conversa | Aviso de contexto reiniciado acima da resposta, mensagens antigas intactas |
+| Recarregar a página | Conversas, fontes e títulos continuam |
+| Parar o Backend e perguntar | Mensagem de erro com "Tentar novamente"; ao religar o Backend, a nova tentativa funciona |
+| Console do navegador | Sem erros de CORS |
+
 ## Verificação com o Bedrock real (pendente)
 
 Resultados esperados para fechar o Backend:
@@ -163,17 +239,29 @@ Resultados esperados para fechar o Backend:
 | Primeira execução lenta ou erro de rede | Download do vocabulário do `tiktoken` |
 | Acentos quebrados na resposta | Use o atalho `Ask` e configure o UTF-8 do console (ver acima) |
 | Todas as respostas dizem "não veio da base interna" | Limite de distância restritivo: aumente `RETRIEVAL_MAX_DISTANCE` e reinicie o servidor |
+| `npm run dev` falha com "Port 5173 is already in use" | Outro processo usa a porta. Feche-o: o Backend só aceita a origem `http://localhost:5173` |
+| Aviso `EBADENGINE` no `npm install` ou erro ao rodar `npm test` | Node abaixo do exigido. Instale o Node 22.22.2+, 24.15.0+ ou 26+ |
+| O chat mostra "Não consegui falar com o assistente" | Backend fora do ar, porta diferente da configurada ou bloqueio de CORS. Confira `http://localhost:8000/health` |
+| O chat mostra "A base de conhecimento ainda não foi indexada" | Falta rodar `ingest.py` |
+| Aviso "Não foi possível salvar as conversas neste navegador" | `localStorage` cheio ou bloqueado (modo privado). As conversas valem só até recarregar a página |
 
 ## Estrutura do repositório
 
 ```
 .env                         segredos (fora do Git; fornecido pelo facilitador)
+start.ps1                    sobe Backend e Frontend ao mesmo tempo
 anyone_kb/                   15 documentos da base de conhecimento
 backend/                     API, ingestão, RAG, agente, sessões e testes
   scripts/ask.ps1            atalho para testar a API no PowerShell
   tests/                     testes de exemplo, de propriedades e de integração
   chroma_store/              índice local (gerado pela ingestão; fora do Git)
-frontend/                    (a criar na Unidade 2)
+frontend/                    interface de chat (React + Vite + TypeScript)
+  src/api/                   cliente de POST /v1/ask e textos de erro
+  src/state/                 regras puras, reducer e contexto das conversas
+  src/storage/               formato e gravação no localStorage
+  src/hooks/                 fluxo de envio de perguntas (useChat)
+  src/components/            chat, barra lateral, diálogo de confirmação
+  src/test/                  geradores (fast-check), invariantes e utilitários de teste
 aidlc-docs/                  documentação do processo AI-DLC (requisitos, design, planos, auditoria)
 vision.md, tech-env.md       visão do projeto e ambiente técnico
 .kiro/                       regras do AI-DLC (v1.0.1) para o Kiro
@@ -190,7 +278,8 @@ O projeto segue o **AI-DLC** com o Kiro. Para continuar:
    - Histórias: `aidlc-docs/inception/user-stories/stories.md`
    - Design e unidades: `aidlc-docs/inception/application-design/` (inclui o contrato HTTP v1 em `unit-of-work-dependency.md`)
    - Backend: `aidlc-docs/construction/backend/` (design funcional, NFR, resumo do código)
+   - Frontend: `aidlc-docs/construction/frontend/` (design funcional, NFR, resumo do código)
 4. Abra a pasta no Kiro (em modo Vibe) e peça para continuar o AI-DLC. As regras em `.kiro/steering/aws-aidlc-rules/core-workflow.md` conduzem o fluxo.
-5. **Próxima etapa:** Unidade 2 (Frontend): Functional Design, NFR Requirements e Code Generation. Depois: Build and Test integrado e este README final.
+5. **Próxima etapa:** Build and Test integrado (Backend com o Bedrock real e Frontend no navegador), conforme as tabelas de verificação acima. Depois: aprovação final do código das duas unidades.
 
 Decisões já tomadas que valem para quem continuar: sem streaming, uma resposta JSON por pergunta; memória de conversa por `session_id` (20 mensagens, 50 sessões); se a base não responde, o agente responde com conhecimento geral e avisa; extensões Security e Resiliency desativadas, Property-Based Testing no modo Parcial.

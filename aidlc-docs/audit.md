@@ -315,3 +315,67 @@
 **Context**: Operacao de git e documentacao fora das etapas do AI-DLC; Backend segue aguardando a execucao com o Bedrock real e a aprovacao do codigo.
 
 ---
+
+## Frontend - Inicio do Functional Design (aprovacao implicita do Backend)
+**Timestamp**: 2026-10-28T18:57:19Z
+**User Input**: "Seguir com o desenvolvimento"
+**AI Response**: "Interpretado como aprovacao do codigo do Backend (mesmo padrao das aprovacoes anteriores) e pedido para avancar para a Unidade 2 Frontend. Pendencias do Backend que seguem para o Build and Test: saida do ruff, ingestao e API com o Bedrock real, calibracao do limite de distancia. Carregados functional-design.md e question-format-guide.md. Criado aidlc-docs/construction/plans/frontend-functional-design-plan.md com 17 perguntas (conversas e barra lateral, envio e erros, interface), 15 regras propostas sem pergunta, textos de erro propostos e pre-analise de propriedades testaveis (PBT-01, fast-check). Respostas nao preenchidas; recomendacoes marcadas como 'Sugestao do assistente'. Compliance de extensoes: Security N/A (desativada), Resiliency N/A (desativada), PBT-01 atendido na pre-analise e sera detalhado nos artefatos."
+**Context**: CONSTRUCTION - Unidade 2 Frontend, Functional Design, Steps 1 a 4 (GATE: aguardar respostas)
+
+---
+
+## Frontend - Functional Design: Recommended Answers Applied and Artifacts Generated
+**Timestamp**: 2026-10-28T19:06:23Z
+**User Input**: "Seguir com as recomendações"
+**AI Response**: "Preenchidas as 17 tags [Answer]: do frontend-functional-design-plan.md com a opcao A (recomendada) em todas, por delegacao explicita. Sem contradicoes ou ambiguidades. Gerados em aidlc-docs/construction/frontend/functional-design/: domain-entities.md (constantes, entidades, ErrorKind, invariantes INV-01 a INV-09), business-rules.md (regras BR-CNV, BR-ENV, BR-ERR, BR-CTX, BR-PER, BR-UI, BR-A11Y e rastreabilidade Q1 a Q17), business-logic-model.md (funcoes puras, reducer, fluxos de inicializacao, envio e persistencia, comportamento do ApiClient, 16 propriedades testaveis PBT-01 com fast-check previsto, testes de exemplo) e frontend-components.md (hierarquia, props, estado, interacoes, validacoes, endpoint POST /v1/ask). Refinamentos em relacao ao Application Design: novo componente FC-11 ConfirmDialog (Q3); Message ganha errorKind e contextReset (Q12), saindo de Conversation.contextReset; Conversation ganha titleIsCustom (Q1); sem pasta nova (helpers em src/state, src/storage e src/api). Compliance de extensoes: Security N/A (desativada), Resiliency N/A (desativada), PBT-01 atendido; PBT-09 fica para o NFR Requirements."
+**Context**: CONSTRUCTION - Unidade 2 Frontend, Functional Design, Steps 5 a 7
+
+---
+
+## Frontend - Functional Design: Completion Approval Prompt
+**Timestamp**: 2026-10-28T19:06:23Z
+**User Input**: "(n/a - prompt de aprovacao apresentado)"
+**AI Response**: "Apresentada a mensagem de conclusao do Functional Design do Frontend com as opcoes Request Changes ou Continue to Next Stage (NFR Requirements). Aguardando aprovacao explicita."
+**Context**: CONSTRUCTION - Unidade 2 Frontend, Functional Design, Step 8 (GATE de aprovacao)
+
+---
+
+## Frontend - Functional Design Approval (implicit) and NFR Requirements
+**Timestamp**: 2026-10-28T19:13:58Z
+**User Input**: "Seguir com o desenvolvimento"
+**AI Response**: "Interpretado como aprovacao do Functional Design do Frontend e pedido para avancar. Aplicada a delegacao anterior do usuario ('o que ja tiver respostas padroes definidas, pode seguir com o default; duvidas, questione no chat'): NFR Requirements do Frontend executado em profundidade minima com os padroes dos documentos de entrada. Versoes consultadas no registro npm e resolvidas juntas em projeto temporario (npm install --package-lock-only, exit 0, sem conflitos; pasta temporaria removida): react 18.3.1, react-dom 18.3.1, react-markdown 10.1.0, remark-gfm 4.0.1, vite 8.3.5, @vitejs/plugin-react 6.1.2, typescript 5.9.3, vitest 5.0.5, jsdom 30.1.3, @testing-library/react 16.3.3, @testing-library/dom 10.4.2, @testing-library/user-event 14.6.8, @testing-library/jest-dom 7.0.1, fast-check 4.10.2, @types/react 18.3.31, @types/react-dom 18.3.7, @types/node 24.19.2. Criados plans/frontend-nfr-requirements-plan.md, frontend/nfr-requirements/nfr-requirements.md (NFR-F-01 a NFR-F-27) e frontend/nfr-requirements/tech-stack-decisions.md (inclui selecao do fast-check, PBT-09). Decisoes de padrao a revisar: sem ESLint/Prettier (verificacao por tsc), sem meta de cobertura no front, ErrorBoundary para tela em branco, tela minima de 1024 px. Risco de ambiente: Node precisa ser ^22.22.2, ^24.15.0 ou >=26 (jsdom 30 e Vitest 5); versao do terminal do usuario nao confirmada. Compliance de extensoes: Security N/A (desativada), Resiliency N/A (desativada), PBT-09 atendido."
+**Context**: CONSTRUCTION - Unidade 2 Frontend; Functional Design aprovado; NFR Requirements Steps 1 a 7
+
+---
+
+## Frontend - NFR Requirements: Completion Approval Prompt
+**Timestamp**: 2026-10-28T19:13:58Z
+**User Input**: "(n/a - prompt de aprovacao apresentado)"
+**AI Response**: "Apresentada a mensagem de conclusao de NFR Requirements do Frontend com as opcoes Request Changes ou Continue to Next Stage (Code Generation). Aguardando aprovacao explicita."
+**Context**: CONSTRUCTION - Unidade 2 Frontend, NFR Requirements, Step 8 (GATE de aprovacao)
+
+---
+
+## Frontend - NFR Requirements Approval (by delegation) and Code Generation Part 1
+**Timestamp**: 2026-10-28T19:18:12Z
+**User Input**: "As definições de front end já estão definidas, seguir com as definições padrão. Inicie o desenvolvimento."
+**AI Response**: "Interpretado como aprovacao do NFR Requirements do Frontend (definicoes padrao mantidas, incluindo tsc sem ESLint, sem meta de cobertura no front e ErrorBoundary) e como aprovacao por delegacao do plano de Code Generation. Carregado construction/code-generation.md. Criado plans/frontend-code-generation-plan.md com 13 passos (estrutura, tipos, regras puras, API, persistencia, reducer, contexto e useChat, componentes, composicao, verificacao com npm, documentacao), rastreabilidade US-10 a US-17 e conformidade PBT. A pendencia sobre a versao do Node no terminal do usuario segue aberta (requer ^22.22.2, ^24.15.0 ou >=26). Execucao da Parte 2 iniciada em seguida."
+**Context**: CONSTRUCTION - Unidade 2 Frontend; NFR Requirements aprovado; Code Generation Parte 1 (plano aprovado por delegacao)
+
+---
+
+## Frontend - Code Generation Part 2 (executed)
+**Timestamp**: 2026-10-28T19:35:08Z
+**User Input**: "(n/a - execucao do plano aprovado por delegacao)"
+**AI Response**: "Executados os 13 passos de plans/frontend-code-generation-plan.md. Criados em frontend/: package.json (versoes exatas), package-lock.json, tsconfig, vite.config.ts, index.html e src/ com types, constants, api (client, errorMessages), state (regras puras, reducer, contexto, ids), storage (persistence, conversationStorage), hooks/useChat, componentes de Chat e Sidebar com CSS Modules, ErrorBoundary, App e main, alem de 19 arquivos de teste (exemplos, propriedades com fast-check, componentes e integracao do App). README raiz atualizado (Frontend, Node, execucao, testes, verificacao integrada, problemas comuns, estrutura) sem segredos. Resumo em construction/frontend/code/code-summary.md. Verificacao no ambiente do assistente (Node 24.15.0, npm 11.12.1): npm install ok; tsc --noEmit sem erros; vitest run 19 arquivos e 187 testes passaram; vite build ok; npm run dev serviu index.html e src/main.tsx na porta 5173 (processo encerrado depois). Correcoes feitas durante a verificacao: tipos de RefObject do React 18, tipo dos mocks de fetch, fc.date com noInvalidDate, dois testes do App. Nao verificado: uso real no navegador com o Backend e o Bedrock. Compliance de extensoes: Security N/A (desativada), Resiliency N/A (desativada), PBT-02/03/07/08/09/10 atendidos."
+**Context**: CONSTRUCTION - Unidade 2 Frontend, Code Generation Parte 2, Steps 10 a 13
+
+---
+
+## Frontend - Code Generation: Completion Approval Prompt
+**Timestamp**: 2026-10-28T19:35:08Z
+**User Input**: "(n/a - prompt de aprovacao apresentado)"
+**AI Response**: "Apresentada a mensagem de conclusao de Code Generation do Frontend com as opcoes Request Changes ou Continue to Next Stage (Build and Test). Aguardando aprovacao explicita."
+**Context**: CONSTRUCTION - Unidade 2 Frontend, Code Generation, Step 15 (GATE de aprovacao)
+
+---
